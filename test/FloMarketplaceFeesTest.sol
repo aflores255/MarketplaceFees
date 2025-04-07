@@ -6,7 +6,7 @@ pragma solidity 0.8.28;
 
 import "forge-std/Test.sol";
 import "../lib/openzeppelin-contracts/contracts/token/ERC721/ERC721.sol";
-import "../src/MarketPlaceFees.sol";
+import "../src/FloMarketplaceFees.sol";
 
 //Mock NFT
 contract MockNFT is ERC721("MockNFT", "MNFT") {
@@ -15,12 +15,12 @@ contract MockNFT is ERC721("MockNFT", "MNFT") {
     }
 }
 
-contract MarketPlaceFeesTest is Test {
+contract FloMarketplaceFeesTest is Test {
     //Variables
     address deployer = vm.addr(1);
     address randomUser1 = vm.addr(2);
     address randomUser2 = vm.addr(3);
-    MarketPlaceFees marketPlace;
+    MarketplaceFees marketPlace;
     MockNFT mockNFT;
     uint256 tokenId = 0;
     uint256 listingFee = 1e16;
@@ -29,7 +29,7 @@ contract MarketPlaceFeesTest is Test {
     function setUp() public {
         mockNFT = new MockNFT();
         vm.startPrank(deployer);
-        marketPlace = new MarketPlaceFees(deployer);
+        marketPlace = new MarketplaceFees(deployer);
         marketPlace.setFees(listingFee, purchaseFee);
         vm.stopPrank();
 
@@ -208,7 +208,7 @@ contract MarketPlaceFeesTest is Test {
         vm.startPrank(deployer);
         vm.expectRevert("No fees to withdraw");
         marketPlace.withdrawFees();
-        vm.stopPrank;
+        vm.stopPrank();
     }
 
     function testWithdrawNotOwner() public {

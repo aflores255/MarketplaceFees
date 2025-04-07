@@ -10,7 +10,7 @@ import "../lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol";
 
 //3. Contract
 
-contract MarketPlaceFees is Ownable, ReentrancyGuard {
+contract FloMarketplaceFees is Ownable, ReentrancyGuard {
     // Variables
     struct Listing {
         address seller;
