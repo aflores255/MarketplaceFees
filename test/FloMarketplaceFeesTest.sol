@@ -20,7 +20,7 @@ contract FloMarketplaceFeesTest is Test {
     address deployer = vm.addr(1);
     address randomUser1 = vm.addr(2);
     address randomUser2 = vm.addr(3);
-    MarketplaceFees marketPlace;
+    FloMarketplaceFees marketPlace;
     MockNFT mockNFT;
     uint256 tokenId = 0;
     uint256 listingFee = 1e16;
@@ -29,7 +29,7 @@ contract FloMarketplaceFeesTest is Test {
     function setUp() public {
         mockNFT = new MockNFT();
         vm.startPrank(deployer);
-        marketPlace = new MarketplaceFees(deployer);
+        marketPlace = new FloMarketplaceFees(deployer);
         marketPlace.setFees(listingFee, purchaseFee);
         vm.stopPrank();
 
