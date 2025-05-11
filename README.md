@@ -1,7 +1,7 @@
-# 🛒 MarketPlaceFees
+# 🛒 MarketPlaceFees - ERC-721 NFT Marketplace with Customizable Listing and Purchase Fees
 
 ## 📌 Description
-**MarketPlaceFees** is a Solidity-based smart contract that enables users to list, buy, and cancel NFTs using Ether, with configurable fees for listing and purchasing. Compatible with any ERC-721 collection, this marketplace allows secure peer-to-peer NFT trading.
+**MarketPlaceFees** is a Solidity-based smart contract that enables users to list, buy, and cancel NFTs using Ether, with fully configurable fees for listing and purchasing. Compatible with any ERC-721 collection, this marketplace allows secure peer-to-peer NFT trading.
 
 The contract is built using **OpenZeppelin** libraries for best security practices and is thoroughly tested using **Foundry**.
 
@@ -22,6 +22,12 @@ The contract is built using **OpenZeppelin** libraries for best security practic
 ---
 
 ## 📜 Contract Details
+
+### 🏗️ Constructor
+
+| **Component** | **Description** |
+|---------------|-----------------|
+| `constructor(address owner)` | Initializes the contract by transferring ownership to the specified `owner` address. This enables access control over owner-only functions using OpenZeppelin's `Ownable` module. |
 
 ### 📡 Events
 
@@ -69,23 +75,21 @@ The contract has been thoroughly tested with **Foundry**. Tests include all core
 | `testWithdrawNotOwner` | Prevents non-owner from withdrawing fees. |
 | `testWithdrawOwner` | Owner successfully withdraws fees. |
 
----
+### 🧪 How to Run Tests
 
-## 🛠️ How to Use
+To run the test suite with Foundry:
 
-### 🔧 Prerequisites
+```bash
+forge test
+```
 
-- Install **Foundry**: [https://book.getfoundry.sh/](https://book.getfoundry.sh/)
-- An Ethereum wallet (e.g., MetaMask).
-- Testnet ETH for testing and deployment (e.g., Goerli, Sepolia).
+### 📊 Coverage Report
 
-### 🚀 Deployment Steps
+| File                    | % Lines         | % Statements     | % Branches      | % Functions     |
+|-------------------------|------------------|-------------------|------------------|------------------|
+| `src/FloMarketPlaceFees.sol` | 100.00% (33/33) | 100.00% (32/32) | 88.89% (16/18) | 100.00% (5/5)   |
 
-1. Clone the repository.
-2. Navigate to the project directory.
-3. Install dependencies if required.
-4. Run tests using `forge test`.
-5. Deploy using Foundry or your preferred deployment tool.
+> 🔍 **Note**: Coverage is not 100% for branches due to one specific edge case — the branch that reverts with `"Transaction Error"` and `"Withdraw Failed"` on failed Ether transfers. Simulating that revert requires a test using a contract that intentionally rejects Ether. 
 
 ---
 
