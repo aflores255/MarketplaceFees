@@ -26,6 +26,7 @@ contract FloMarketplaceFeesTest is Test {
     uint256 listingFee = 1e16;
     uint256 purchaseFee = 3e16;
 
+    //Tests setUp
     function setUp() public {
         mockNFT = new MockNFT();
         vm.startPrank(deployer);
@@ -38,11 +39,13 @@ contract FloMarketplaceFeesTest is Test {
         vm.stopPrank();
     }
 
+    //Test to Mint a ERC-721 NFT
     function testMintNFT() public view {
         address ownerOf = mockNFT.ownerOf(tokenId);
         assert(ownerOf == randomUser1);
     }
 
+    //Test to avoid price 0 when listing
     function testPriceZero() public {
         uint256 price_ = 0;
         vm.startPrank(randomUser1);
@@ -51,6 +54,7 @@ contract FloMarketplaceFeesTest is Test {
         vm.stopPrank();
     }
 
+    //Test to ensure listing fee is sent
     function testIncorrectListingFee() public {
         uint256 price_ = 1 ether;
         uint256 userBalance = 1 ether;
@@ -61,6 +65,7 @@ contract FloMarketplaceFeesTest is Test {
         vm.stopPrank();
     }
 
+    //Test Owner's NFT
     function testNotNFTOwner() public {
         uint256 price_ = 1 ether;
         uint256 tokenId_ = 1;
@@ -71,6 +76,7 @@ contract FloMarketplaceFeesTest is Test {
         vm.stopPrank();
     }
 
+    //Test listing of ERC-721 NFT
     function testListNFT() public {
         uint256 price_ = 10 ether;
         uint256 userBalance = 1 ether;
@@ -84,6 +90,7 @@ contract FloMarketplaceFeesTest is Test {
         vm.stopPrank();
     }
 
+    //Test to cancel listing if the user is not the owner
     function testCancelNotOwner() public {
         uint256 price_ = 10 ether;
         uint256 userBalance = 1 ether;
@@ -102,6 +109,7 @@ contract FloMarketplaceFeesTest is Test {
         vm.stopPrank();
     }
 
+    //Test to cancel listing
     function testCancelListing() public {
         uint256 price_ = 10 ether;
         uint256 userBalance = 1 ether;
@@ -121,6 +129,7 @@ contract FloMarketplaceFeesTest is Test {
         vm.stopPrank();
     }
 
+    //Test to buy an unlisted NFT
     function testBuyUnlistedNFT() public {
         uint256 userBalance = 50 ether;
         vm.startPrank(randomUser2);
@@ -131,6 +140,7 @@ contract FloMarketplaceFeesTest is Test {
         vm.stopPrank();
     }
 
+    //Test to buy a NFT for the wrong price
     function testBuyIncorrectPrice() public {
         uint256 price_ = 10 ether;
         uint256 userBalance = 50 ether;
@@ -151,6 +161,7 @@ contract FloMarketplaceFeesTest is Test {
         vm.stopPrank();
     }
 
+    //Test to buy a NFT
     function testBuyNFT() public {
         uint256 price_ = 10 ether;
         uint256 userBalance = 50 ether;
@@ -184,6 +195,7 @@ contract FloMarketplaceFeesTest is Test {
         vm.stopPrank();
     }
 
+    //Test to set new listing and purchase fees
     function testSetFeesOnlyOwner() public {
         uint256 newListingFee = 1 wei;
         uint256 newPurchaseFee = 2 wei;
@@ -195,6 +207,7 @@ contract FloMarketplaceFeesTest is Test {
         vm.stopPrank();
     }
 
+    //Test to avoid new fees in case the user is not the owner
     function testSetFeesNotOwner() public {
         uint256 newListingFee = 1 wei;
         uint256 newPurchaseFee = 2 wei;
@@ -204,6 +217,7 @@ contract FloMarketplaceFeesTest is Test {
         vm.stopPrank();
     }
 
+    //Test to withdraw funds if balance is zero
     function testWithdrawNoFunds() public {
         vm.startPrank(deployer);
         vm.expectRevert("No fees to withdraw");
@@ -211,6 +225,7 @@ contract FloMarketplaceFeesTest is Test {
         vm.stopPrank();
     }
 
+    //Test to withdraw funds in case the user is not the owner
     function testWithdrawNotOwner() public {
         uint256 price_ = 10 ether;
         uint256 userBalance = 1 ether;
@@ -226,6 +241,7 @@ contract FloMarketplaceFeesTest is Test {
         vm.stopPrank();
     }
 
+    //Test to withdraw funds
     function testWithdrawOwner() public {
         uint256 price_ = 10 ether;
         uint256 userBalance = 50 ether;

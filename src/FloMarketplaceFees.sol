@@ -34,9 +34,18 @@ contract FloMarketplaceFees is Ownable, ReentrancyGuard {
     event FeesUpdated(uint256 newListingFee, uint256 newPurchaseFee);
     event FeesWithdrawn(address indexed recipient, uint256 amount);
 
+    /**
+     * @notice Initializes the contract and sets the initial owner.
+     * @param owner The address that will be assigned as the initial contract owner.
+     */
     constructor(address owner) Ownable(owner) {}
 
-    //List NFT
+    /**
+     * @notice Lists an NFT for sale on the marketplace.
+     * @param nftAddress_ The address of the ERC-721 contract.
+     * @param tokenId_ The ID of the token to be listed.
+     * @param price_ The listing price in wei.
+     */
     function listNFT(address nftAddress_, uint256 tokenId_, uint256 price_) external payable nonReentrant {
         require(price_ > 0, "Price must be above 0");
         address owner_ = IERC721(nftAddress_).ownerOf(tokenId_);
@@ -51,8 +60,11 @@ contract FloMarketplaceFees is Ownable, ReentrancyGuard {
         emit NFTListing(msg.sender, nftAddress_, tokenId_, price_);
     }
 
-    //Buy NFT
-
+    /**
+     * @notice Purchases an NFT listed on the marketplace.
+     * @param nftAddress_ The address of the ERC-721 contract.
+     * @param tokenId_ The ID of the token to purchase.
+     */
     function buyNFTEther(address nftAddress_, uint256 tokenId_) external payable nonReentrant {
         Listing memory listing_ = listing[nftAddress_][tokenId_];
         uint256 totalPrice = listing_.price + purchaseFee;
@@ -69,8 +81,11 @@ contract FloMarketplaceFees is Ownable, ReentrancyGuard {
         emit NFTSold(msg.sender, listing_.seller, listing_.nftCollection, listing_.tokenId, listing_.price);
     }
 
-    //Cancel List
-
+    /**
+     * @notice Cancels an active NFT listing.
+     * @param nftAddress_ The address of the ERC-721 contract.
+     * @param tokenId_ The ID of the token to cancel the listing for.
+     */
     function cancelList(address nftAddress_, uint256 tokenId_) external nonReentrant {
         Listing memory listing_ = listing[nftAddress_][tokenId_];
         require(listing_.seller == msg.sender, "Did not list this NFT");
@@ -80,14 +95,20 @@ contract FloMarketplaceFees is Ownable, ReentrancyGuard {
         emit cancelNFT(msg.sender, nftAddress_, tokenId_);
     }
 
-    // Set listing and purchase fees
-    function setFees(uint256 _listingFee, uint256 _purchaseFee) external onlyOwner {
-        listingFee = _listingFee;
-        purchaseFee = _purchaseFee;
-        emit FeesUpdated(_listingFee, _purchaseFee);
+    /**
+     * @notice Sets the listing and purchase fees.
+     * @param listingFee_ The fee charged for listing an NFT, in basis points (10000 = 100%)
+     * @param purchaseFee_ The fee charged for purchasing an NFT, in basis points
+     */
+    function setFees(uint256 listingFee_, uint256 purchaseFee_) external onlyOwner {
+        listingFee = listingFee_;
+        purchaseFee = purchaseFee_;
+        emit FeesUpdated(listingFee_, purchaseFee_);
     }
 
-    // Withdraw accumulated fees
+    /**
+     * @notice Withdraws all accumulated ETH fees from the contract to the owner's address.
+     */
     function withdrawFees() external onlyOwner {
         uint256 balance = address(this).balance;
         require(balance > 0, "No fees to withdraw");
