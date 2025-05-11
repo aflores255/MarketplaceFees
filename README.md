@@ -1,4 +1,4 @@
-# 🛒 MarketPlaceFees - ERC-721 NFT Marketplace with Customizable Listing and Purchase Fees
+# 🛒 MarketPlaceFees - ERC-721 NFT Marketplace
 
 ## 📌 Description
 **MarketPlaceFees** is a Solidity-based smart contract that enables users to list, buy, and cancel NFTs using Ether, with fully configurable fees for listing and purchasing. Compatible with any ERC-721 collection, this marketplace allows secure peer-to-peer NFT trading.
@@ -27,7 +27,7 @@ The contract is built using **OpenZeppelin** libraries for best security practic
 
 | **Component** | **Description** |
 |---------------|-----------------|
-| `constructor(address owner)` | Initializes the contract by transferring ownership to the specified `owner` address. This enables access control over owner-only functions using OpenZeppelin's `Ownable` module. |
+| `constructor(address owner, uint256 listingFee_, uint256 purchaseFee_)` | Initializes the contract by transferring ownership to the specified `owner` address and setting initial listing and purchase fees. This enables access control over owner-only functions using OpenZeppelin's `Ownable` module. |
 
 ### 📡 Events
 
@@ -48,6 +48,105 @@ The contract is built using **OpenZeppelin** libraries for best security practic
 | `cancelList(address nftAddress, uint256 tokenId)` | Cancel a listing (only by seller). |
 | `setFees(uint256 listingFee, uint256 purchaseFee)` | Set new listing and purchase fees (only owner). |
 | `withdrawFees()` | Withdraw collected fees (only owner). |
+
+---
+
+## 🚀 Deployment & Usage
+
+This section outlines how to interact with the `FloMarketplaceFees` smart contract deployed on the **Arbitrum One** network. It includes instructions to list and buy NFTs using the live marketplace, and explains how fee withdrawals work for the contract owner.
+
+🔗 **Deployed Contract:** [0x33085a5a14ACd29E162587fD702f055Fe5Ac131e on Arbiscan](https://arbiscan.io/address/0x33085a5a14ACd29E162587fD702f055Fe5Ac131e)
+
+---
+
+### 📤 How to List an NFT
+
+To list your ERC-721 NFT on the marketplace:
+
+1. **Approve the marketplace to transfer your NFT**  
+   Go to your NFT contract on Arbiscan, for instance:  
+   [DragonNFTCollection at 0xafFc28fD8DBDFBD17e6d47A98aa2b7A73ae39C33](https://arbiscan.io/address/0xafFc28fD8DBDFBD17e6d47A98aa2b7A73ae39C33)
+
+   Navigate to **Write Contract → Connect to Web3**, then call:
+   - `approve(address to, uint256 tokenId)`
+   - Use:
+     - `to`: `0x33085a5a14ACd29E162587fD702f055Fe5Ac131e`
+     - `tokenId`: `0` (your token id)
+
+2. **List the NFT via the marketplace contract**  
+   Go to the marketplace’s [Write Contract tab](https://arbiscan.io/address/0x33085a5a14ACd29E162587fD702f055Fe5Ac131e#writeContract), connect your wallet, and call:
+
+   - `listNFT(address _nft, uint256 _tokenId, uint256 _price)`
+     - `nftAddress_`: `0xafFc28fD8DBDFBD17e6d47A98aa2b7A73ae39C33`
+     - `tokenId_`: `0` (your token id)
+     - `price_`: `1` (enter your price in wei)
+
+✅ **Example Listing:**
+- **Seller**: `0x36e985fd5fCD00F6a30a4c3291214a2d29e2B583`
+- **NFT Collection**: `0xafFc28fD8DBDFBD17e6d47A98aa2b7A73ae39C33`
+- **Token ID**: `0`
+- **Price**: `1`
+
+---
+
+### 🛒 How to Buy a Listed NFT
+
+To buy a listed NFT:
+
+1. Go to the marketplace contract on Arbiscan:  
+   [0x33085a5a14ACd29E162587fD702f055Fe5Ac131e](https://arbiscan.io/address/0x33085a5a14ACd29E162587fD702f055Fe5Ac131e)
+
+2. Connect your wallet (on the Arbitrum One network), then call:
+
+   - `buyNFTEther(address nftAddress_, uint256 tokenId_)`
+   - Provide:
+     - `nftAddress_`: `0xafFc28fD8DBDFBD17e6d47A98aa2b7A73ae39C33`
+     - `tokenId_`: `0`
+   - In the “Value” field, enter the total price including the purchase fee.  
+     For example, if price is `1 wei` and purchase fee is `2 wei`, send `3 wei`.
+
+3. Confirm and submit the transaction. The NFT will be transferred to your address.
+
+---
+
+### 📄 Check a Listing
+
+To check if an NFT is listed:
+
+- Go to the **Read Contract** tab of the marketplace.
+- Call: `listing(address nftAddress_, uint256 tokenId_)`
+- Example:
+  - `nftAddress_`: `0xafFc28fD8DBDFBD17e6d47A98aa2b7A73ae39C33`
+  - `tokenId_`: `0`
+
+You’ll see:
+- `seller`: `0x36e985fd5fCD00F6a30a4c3291214a2d29e2B583`
+- `nftCollection`: `0xafFc28fD8DBDFBD17e6d47A98aa2b7A73ae39C33`
+- `tokenId`: `1`
+- `price`: `1`
+
+---
+
+### 💰 Fee Management (Owner Only)
+
+The contract owner can withdraw all collected listing and purchase fees by calling:
+
+- `withdrawFees()`
+
+This sends the full ETH balance of the contract to the `owner` address defined at deployment.
+
+---
+
+### 🔗 Example Listing Transaction
+
+An example listing created with this marketplace:
+
+🔹 [Tx Hash: 0x... (example)](https://arbiscan.io/tx/0xe5608c3d62c417598bfa3639cd5375d8d29985d6f06f769689e53ea98b20ef7e)  
+- NFT listed at: `1 wei`  
+- Token ID: `0`  
+- Seller: `0x36e9...`  
+- NFT Contract: `0xafFc28...`  
+- Marketplace: `0x33085a...`
 
 ---
 

@@ -30,8 +30,7 @@ contract FloMarketplaceFeesTest is Test {
     function setUp() public {
         mockNFT = new MockNFT();
         vm.startPrank(deployer);
-        marketPlace = new FloMarketplaceFees(deployer);
-        marketPlace.setFees(listingFee, purchaseFee);
+        marketPlace = new FloMarketplaceFees(deployer, listingFee, purchaseFee);
         vm.stopPrank();
 
         vm.startPrank(randomUser1);

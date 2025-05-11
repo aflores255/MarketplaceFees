@@ -37,8 +37,13 @@ contract FloMarketplaceFees is Ownable, ReentrancyGuard {
     /**
      * @notice Initializes the contract and sets the initial owner.
      * @param owner The address that will be assigned as the initial contract owner.
+     * @param listingFee_ initial listingFee
+     * @param purchaseFee_ initial purchase fee
      */
-    constructor(address owner) Ownable(owner) {}
+    constructor(address owner, uint256 listingFee_, uint256 purchaseFee_) Ownable(owner) {
+        listingFee = listingFee_;
+        purchaseFee = purchaseFee_;
+    }
 
     /**
      * @notice Lists an NFT for sale on the marketplace.
